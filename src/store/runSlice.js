@@ -12,7 +12,7 @@ const initialState = {
   relics: [], // Re-added relics to state
   drawsLeft: 8,
   currentLevelIndex: 0,
-  gameState: "playing",
+  gameState: "relicSelection", // Start with relic selection
 };
 
 const runSlice = createSlice({
@@ -23,7 +23,7 @@ const runSlice = createSlice({
       if (!state.initialized) {
         const seed = action.payload || Date.now().toString();
         const rng = seedrandom(seed);
-        state.deck = generateDeck(20, rng);
+        state.deck = generateDeck(15, rng);
         state.availableDeck = [...state.deck].sort(() => rng() - 0.5);
         state.seed = seed;
         state.score = 0;
@@ -32,7 +32,7 @@ const runSlice = createSlice({
         state.initialized = true;
         state.drawsLeft = 8;
         state.currentLevelIndex = 0;
-        state.gameState = "playing";
+        state.gameState = "relicSelection"; // Start with relic selection
       }
     },
     shuffleDeck: (state, action) => {
@@ -41,7 +41,11 @@ const runSlice = createSlice({
     },
     modifyDeck: (state, action) => {
       state.deck = action.payload;
-      state.availableDeck = [...action.payload].sort(() => Math.random() - 0.5);
+      // Don't reshuffle availableDeck - just update the card data to preserve order
+      state.availableDeck = state.availableDeck.map(availCard => {
+        const updatedCard = action.payload.find(c => c.id === availCard.id);
+        return updatedCard || availCard;
+      });
     },
     drawFromAvailableDeck: (state, action) => {
       if (state.drawsLeft > 0 && state.availableDeck.length > 0) {
@@ -70,7 +74,9 @@ const runSlice = createSlice({
       if (action.payload.effect === "extraDraw") {
        state.drawsLeft += 1;
       }
-
+    },
+    addDraws: (state, action) => {
+      state.drawsLeft += action.payload;
     },
     resetRun: (state) => {
       state.deck = [];
@@ -82,13 +88,18 @@ const runSlice = createSlice({
       state.initialized = false;
       state.drawsLeft = 8;
       state.currentLevelIndex = 0;
-      state.gameState = "playing";
+      state.gameState = "relicSelection"; // Start with relic selection on reset
     },
     setGameState: (state, action) => {
       state.gameState = action.payload;
     },
     proceedToNextLevel: (state, action) => {
       state.score = 0;
+      if(state.relics.some((r) => r.effect === "startingMoney")){
+        state.money += 6 + action.payload; // Base reward money + draws left
+      }else{
+        state.money += 3 + action.payload; // Base reward money + draws left
+      }
       state.currentLevelIndex += 1;
       state.gameState = "playing"; // Ensure shop pops up after each level
       state.drawsLeft = action.payload || 8;
@@ -107,6 +118,7 @@ export const {
   addMoney,
   spendMoney,
   addRelic,
+  addDraws,
   resetRun,
   setGameState,
   proceedToNextLevel,
