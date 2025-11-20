@@ -6,7 +6,7 @@ import DeckModal from "../components/deckModal";
 
 // Sort cards by color groups and value within each group
 const sortDeckByColorAndValue = (deck) => {
-  const colorOrder = ['red', 'blue', 'green', 'yellow'];
+  const colorOrder = ['red', 'blue', 'green', 'yellow', 'purple'];
   
   // Separate wild cards
   const wildCards = deck.filter(card => card.enhancement === 'wild');
@@ -184,7 +184,13 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
           </div>
         </div>
 
-        {displayedRelics.length > 0 && (
+        {levelNumber%2===0&& (
+          <div>
+            <h3 className="section-title">Relics only show up after beating odd numbered levels, plan wisely</h3>
+          </div>
+        )}
+
+        {displayedRelics.length > 0 && levelNumber%2!==0 && (
           <div className="shop-section">
             <h3 className="section-title">✨ Relics</h3>
             <div className="shop-grid relic-grid">

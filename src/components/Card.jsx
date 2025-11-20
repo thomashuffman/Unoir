@@ -1,6 +1,5 @@
 import React from "react";
 import "../App.css";
-
 export default function Card({ card, onClick, small }) {
   const isTempWildcard = card.tempWild;
   const isWildcard = card.enhancement === "wild" || isTempWildcard;

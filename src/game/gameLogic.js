@@ -16,6 +16,25 @@ export function generateDeck(size = 15, rng = Math.random) {
   return deck.sort(() => rng() - 0.5);
 }
 
+export function pickBossEffect(pastBosses, rng = Math.random){
+  const BOSSEFFECTS = [
+    {name: 'chainExpensive', description: 'The cost of resetting the chain is equal to your total money'},
+    {name: 'baseIs3', description: 'The base value of every played card is 3 regardless of the number on the card'},
+    {name: 'noLongChains', description: 'Each card in the chain is -1 from the total score'}
+  ]
+  // const possibleBosses = BOSSEFFECTS.filter(
+  //   (relic) => !pastBosses.some((r) => r.effect === relic.effect)
+  // );
+
+  const possibleBosses = BOSSEFFECTS.filter(
+    (boss) => !pastBosses.some((r) => r.name === boss.name)
+  );
+  //let possibleBosses = BOSSEFFECTS.some()
+  let chosenBoss=possibleBosses[Math.floor(rng()*possibleBosses.length)];
+
+  return chosenBoss;
+}
+
 export function generatePackOptions(packType, deck, rng = Math.random) {
   const suits = ["red", "green", "blue", "yellow"];
   const enhancements = [null, "plusFive", "wild", "plusMoney"];
@@ -46,9 +65,45 @@ export function generatePackOptions(packType, deck, rng = Math.random) {
   return options;
 }
 
-export function calculateCardScore(chain, card, currentScore, rng = Math.random, hasLuckyBonus = false) {
+export function calculateCardScore(chain, card, currentScore, rng = Math.random, relics, currentBoss, base2Value) {
+  
   let base = card.value;
-  let multiplier = 1;
+  if(currentBoss.name === "baseIs3"){
+    base = 3;
+  }
+
+  if(card.value === 2){
+    base+=base2Value;
+  }
+
+  const hasBaseIncrease = relics.some(r => r.effect === "baseValueIncrease");
+  const hasLuckyBonus = relics.some((r) => r.effect === "luckyBonus");
+  const hasOneMaxer = relics.some((r) => r.effect === "oneMultiplier");
+  const hasChainStarter = relics.some((r) => r.effect === "firstCardDouble");
+  const hasPerfectHarmony = relics.some((r) => r.effect === "colorBonus");
+  const hasMomentumBuilder = relics.some((r) => r.effect === "chainScaling");
+  const hasValueMultiplier = relics.some((r) => r.effect === "highValueBonus");
+  const hasComboKing = relics.some((r) => r.effect === "comboBonus");
+  const hasIncreasingSequence = relics.some((r) => r.effect === "increasingSequence");
+   
+   if (hasValueMultiplier && card.value >= 4) {
+     base += 2;
+   }
+      
+  if (hasPerfectHarmony && chain.length > 0) {
+      const prevCard = chain[chain.length - 1];
+      if (card.color !== prevCard.color && card.color !== "purple" && prevCard.color !== "purple") {
+        base += 4;
+    }
+  }
+
+  if(hasBaseIncrease){
+    base+=2;
+  }
+
+  if(hasChainStarter && chain.length<=1){
+    base*=2;
+  }
 
   // Apply chain bonuses
   if (chain.length > 0) {
@@ -61,8 +116,14 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
     }
   }
 
-  let score = Math.round(base * multiplier);
+  let score = base;
 
+  if (hasMomentumBuilder && chain.length >= 3) {
+    score += chain.length-2;
+  }
+  if (hasComboKing && chain.length >= 4) {
+    score += 2 * (chain.length + 1);
+  }
   // Apply card enhancements
   if (card.enhancement === "plusFive") {
     score += 5;
@@ -72,13 +133,44 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
     score += Math.round(currentScore * (purpleMultiplier - 1));
   }
 
-  // Gambler's Die relic: 20% chance to double card points
+  // Gambler's Die relic: 15% chance to double card points
   let bonusTriggered = false;
   let chanceToProc = rng();
-  if (hasLuckyBonus && chanceToProc < 0.2) {
+  if (hasLuckyBonus && chanceToProc < 0.15) {
     score *= 2;
     bonusTriggered = true;
   }
+
+  let finalMultiplier = 1;
+  
+  if(hasIncreasingSequence && card.value===6){
+    let chainIndex = chain.length-1;
+    let correctDecrease = 5
+    while (chainIndex >=0){
+      if(chain[chainIndex].value !== correctDecrease){
+        break;
+      }
+      if(correctDecrease === 1){
+        score+=100;
+        break;
+      }
+      correctDecrease-=1;
+      chainIndex-=1;
+    }
+  }
+  
+  if(hasOneMaxer && card.value===1){
+    let chainIndex = chain.length - 1;
+    while (chainIndex >=0){
+      if(chain[chainIndex].value === 1){
+        finalMultiplier+=1;
+      }else{
+        break;
+      }
+      chainIndex-=1;
+    }
+  }
+  score = Math.round(score * (finalMultiplier));
 
   return { score, bonusTriggered };
 }

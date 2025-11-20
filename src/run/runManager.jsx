@@ -4,6 +4,7 @@ import {
   initializeDeck,
   drawFromAvailableDeck,
   addScore,
+  add2Base,
   resetRun,
   resetScore,
   setGameState,
@@ -26,9 +27,9 @@ import Tooltip from "../components/Tooltip";
 
 // ========== DEV MODE ==========
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
-const DEV_MODE = false; // Set to true to enable dev mode
+const DEV_MODE = true; // Set to true to enable dev mode
 const DEV_RELICS = [
-  "Perfect Hand"
+  "Mystic Hourglass"
   // "Rainbow Bridge",
   // "Chromatic Fusion",
 ]; // Add relic names here to force them into the selection
@@ -36,19 +37,27 @@ const DEV_RELICS = [
 
 export default function RunManager({ onExitRun }) {
   const LEVELS = [
-    { number: 1, goal: 20, maxDraws: 8 },
-    { number: 2, goal: 40, maxDraws: 8 },
-    { number: 3, goal: 70, maxDraws: 8 },
-    { number: 4, goal: 90, maxDraws: 8 },
-    { number: 5, goal: 110, maxDraws: 8 },
-    { number: 6, goal: 130, maxDraws: 8 },
-    { number: 7, goal: 150, maxDraws: 8 },
+    { number: 0, goal: 0, maxDraws: 8, levelType: 'normal' },
+    { number: 1, goal: 20, maxDraws: 8, levelType: 'normal' },
+    { number: 2, goal: 40, maxDraws: 8, levelType: 'normal' },
+    { number: 3, goal: 70, maxDraws: 8, levelType: 'normal' },
+    { number: 4, goal: 90, maxDraws: 8, levelType: 'normal' },
+    { number: 5, goal: 110, maxDraws: 8, levelType: 'boss1' },
+    { number: 6, goal: 130, maxDraws: 8, levelType: 'normal' },
+    { number: 7, goal: 150, maxDraws: 8, levelType: 'normal' },
+    { number: 8, goal: 190, maxDraws: 8, levelType: 'normal' },
+    { number: 9, goal: 210, maxDraws: 8, levelType: 'normal' },
+    { number: 10, goal: 250, maxDraws: 8, levelType: 'boss2' },
+    { number: 11, goal: 300, maxDraws: 8, levelType: 'normal' },
+    { number: 12, goal: 320, maxDraws: 8, levelType: 'normal' },
+    { number: 13, goal: 350, maxDraws: 8, levelType: 'normal' },
+    { number: 14, goal: 400, maxDraws: 8, levelType: 'bossfinal' },
   ];
 
   const INITIAL_HAND_SIZE = 5;
 
   const dispatch = useDispatch();
-  const { deck, availableDeck, initialized, score, money, drawsLeft, currentLevelIndex, gameState, relics } = useSelector((state) => state.run);
+  const { deck, availableDeck, initialized, score, money, drawsLeft, currentLevelIndex, gameState, relics, currentBoss, current2Base } = useSelector((state) => state.run);
   const { seed } = useSelector((state) => state.run);
 
   // Use Math.random for gameplay randomness (Gambler's Die, Purple cards)
@@ -101,6 +110,15 @@ export default function RunManager({ onExitRun }) {
       cost: 2,
       rarity: "common"
     },
+    { 
+      name: "Base Value ++", 
+      effect: "baseValueIncrease", 
+      descriptionText: "The base value of each card is +2",
+      description: <>Whenever you play a card the base value is increased by 2</>,
+      icon: "+",
+      cost: 3,
+      rarity: "common"
+    },
 
     // UNCOMMON RELICS (Moderate strategic effects)
     { 
@@ -115,8 +133,8 @@ export default function RunManager({ onExitRun }) {
     { 
       name: "Gambler's Die", 
       effect: "luckyBonus", 
-      descriptionText: "20% chance to double points from each card",
-      description: <>20% chance to double points from each card</>,
+      descriptionText: "15% chance to double points from each card",
+      description: <>15% chance to double points from each card</>,
       icon: "🎲",
       cost: 4,
       rarity: "uncommon"
@@ -160,8 +178,8 @@ export default function RunManager({ onExitRun }) {
     { 
       name: "Momentum Surge", 
       effect: "deckSizeMultiplier", 
-      descriptionText: "Cards get a score multiplier based on remaining deck size (11+ cards = 1.1x, 12+ = 1.2x, etc.)",
-      description: <>Cards get a score multiplier based on remaining <Tooltip text="The pile of cards you draw from">deck</Tooltip> size (11+ cards = 1.1x, 12+ = 1.2x, etc.)</>,
+      descriptionText: "Cards get a score addition based on remaining deck size (11+ cards +2, 12+ cards +4, 12+ cards +6)",
+      description: <>Cards get a score addition based on remaining <Tooltip text="The pile of cards you draw from">deck</Tooltip> size (11+ cards = +2, 12+ = +4, etc.)</>,
       icon: "⚡",
       cost: 6,
       rarity: "uncommon"
@@ -175,6 +193,15 @@ export default function RunManager({ onExitRun }) {
       cost: 6,
       rarity: "uncommon"
     },
+    { 
+      name: "Two For You", 
+      effect: "twoPermanent", 
+      descriptionText: "Every time you play a 2 all 2s in your deck gain +2 base value",
+      description: <>Every time you play a 2 all 2s in your deck gain +2 base value</>,
+      icon: "2",
+      cost: 6,
+      rarity: "uncommon"
+    },
     // RARE RELICS (Powerful strategic effects)
     { 
       name: "Chain Starter", 
@@ -182,6 +209,24 @@ export default function RunManager({ onExitRun }) {
       descriptionText: "The first card of each chain scores double points",
       description: <>The first card of each <Tooltip text="A sequence of cards played in a row that match by color or value">chain</Tooltip> scores double points</>,
       icon: "⛓️",
+      cost: 6,
+      rarity: "rare"
+    },
+    { 
+      name: "One Maxer", 
+      effect: "oneMultiplier", 
+      descriptionText: "+1x for every 1 played in a row.",
+      description: <>Every 1 played in a row will increase the multiplier by 1 I.E. 1-1-1 will have a multiply the score of the 3rd 1 by 3</>,
+      icon: "1x",
+      cost: 6,
+      rarity: "rare"
+    },
+    { 
+      name: "Sequence Dawg", 
+      effect: "increasingSequence", 
+      descriptionText: "If cards are played in sequential order I.E. 1-2-3-4-5-6 +100 points when the 6 is played",
+      description: <>If cards are played in sequential order I.E. 1-2-3-4-5-6 +100 points when the 6 is played</>,
+      icon: "1->2",
       cost: 6,
       rarity: "rare"
     },
@@ -389,6 +434,10 @@ export default function RunManager({ onExitRun }) {
       dispatch(addMoney(3));
     } else if (relic.effect === "startingMoneySmall") {
       dispatch(addMoney(2));
+    }else if(relic.effect === "bonusDraws"){
+      dispatch(addDraws(3));
+    }else if(relic.effect === "extraDraw"){
+      dispatch(addDraws(1));
     }
     dispatch(setGameState("playing"));
   };
@@ -459,7 +508,10 @@ export default function RunManager({ onExitRun }) {
       
       if (currentLevelIndex === LEVELS.length - 1) {
         dispatch(setGameState("win"));
-      } else {
+      } else if(LEVELS[currentLevelIndex].levelType.startsWith('boss')){
+        //TODO: update this so that we have a special event or screen for beating the boss
+        dispatch(setGameState("shop"));
+      }else {
         dispatch(setGameState("shop"));
       }
       return;
@@ -515,6 +567,7 @@ export default function RunManager({ onExitRun }) {
         return; // No more cards to draw
       }
     }
+    
 
     const newCard = availableDeck[0];
     dispatch(drawFromAvailableDeck());
@@ -555,31 +608,14 @@ export default function RunManager({ onExitRun }) {
     
     if (gameState !== "playing") return;
     
-    // Check if player has Gambler's Die relic
-    const hasLuckyBonus = relics.some((r) => r.effect === "luckyBonus");
-    
     // Check if player has Chain Starter relic (first card of chain gets double points)
     const hasChainStarter = relics.some((r) => r.effect === "firstCardDouble");
     const isFirstCardInChain = chain.length === 0;
     
     // Use Math.random for card scoring randomness
-    const result = calculateCardScore(chain, card, score, Math.random, hasLuckyBonus);
+    const result = calculateCardScore(chain, card, score, Math.random, relics, currentBoss, current2Base);
     let cardScore = result.score;
     const bonusTriggered = result.bonusTriggered;
-    
-    // Apply Chain Starter bonus
-    if (hasChainStarter && isFirstCardInChain) {
-      cardScore *= 2;
-    }
-    
-    // Perfect Harmony: Alternating colors give +4 points
-    const hasPerfectHarmony = relics.some((r) => r.effect === "colorBonus");
-    if (hasPerfectHarmony && chain.length > 0) {
-      const prevCard = chain[chain.length - 1];
-      if (card.color !== prevCard.color && card.color !== "purple" && prevCard.color !== "purple") {
-        cardScore += 4;
-      }
-    }
     
     // Track card memory - increment times played for THIS SPECIFIC CARD by ID
     const newTimesPlayed = (card.timesPlayed || 0) + 1;
@@ -636,34 +672,28 @@ export default function RunManager({ onExitRun }) {
         finalScore = cardScore + 2;
       }
     }
-    
-    // Momentum Builder: Each card after the 3rd in a chain gives +1 extra point
-    const hasMomentumBuilder = relics.some((r) => r.effect === "chainScaling");
-    if (hasMomentumBuilder && chain.length >= 3) {
-      finalScore += 1;
-    }
-    
-    // Value Multiplier: Cards with value 4+ give +2 extra points
-    const hasValueMultiplier = relics.some((r) => r.effect === "highValueBonus");
-    if (hasValueMultiplier && card.value >= 4) {
-      finalScore += 2;
-    }
-    
-    // Combo King: Chains of 5+ give +3 points per card
-    const hasComboKing = relics.some((r) => r.effect === "comboBonus");
-    if (hasComboKing && chain.length >= 4) {
-      finalScore += 2 * (chain.length + 1);
-    }
 
     // Momentum Surge: Multiply card score based on remaining deck size
     const hasMomentumSurge = relics.some((r) => r.effect === "deckSizeMultiplier");
     if (hasMomentumSurge) {
-      const multiplier = 1 + Math.floor(availableDeck.length - 10) * 0.1;
-      finalScore = Math.floor(finalScore * multiplier);
+      let additive = 0;
+      if( availableDeck.length >= 11 ){
+        for( let i = 11; i <= availableDeck.length; i++ ){
+          additive += 2;
+        }
+      }
+      finalScore = Math.floor(finalScore + additive);
+    }
+    if(currentBoss.name==="noLongChains"){
+        finalScore-=chain.length;
     }
     
     dispatch(addScore(finalScore));
-    
+
+    if(card.value === 2 && relics.some((r) => r.effect === "twoPermanent")){
+      dispatch(add2Base());
+    }
+
     if (card.enhancement === "plusMoney") {
       dispatch(addMoney(1));
     }
@@ -947,6 +977,7 @@ export default function RunManager({ onExitRun }) {
               chain={chain}
               drawsLeft={drawsLeft}
               score={score}
+              level={currentLevel.number}
               goalScore={currentLevel.goal}
               money={money}
               onDraw={drawCardHandler}
@@ -954,6 +985,7 @@ export default function RunManager({ onExitRun }) {
               onResetChain={resetChain}
               relics={relics}
               availableDeck={availableDeck}
+              LEVELS={LEVELS}
             />
           )}
 

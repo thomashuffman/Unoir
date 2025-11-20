@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import seedrandom from "seedrandom";
-import { generateDeck } from "../game/gameLogic";
+import { generateDeck, pickBossEffect } from "../game/gameLogic";
 
 const initialState = {
   deck: [],
   availableDeck: [],
+  currentBoss: {},
   seed: null,
   score: 0,
   money: 0,
@@ -12,6 +13,9 @@ const initialState = {
   relics: [], // Re-added relics to state
   drawsLeft: 8,
   currentLevelIndex: 0,
+  currentBoss: {},
+  pastBosses: [],
+  current2Base: 0,
   gameState: "relicSelection", // Start with relic selection
 };
 
@@ -30,8 +34,12 @@ const runSlice = createSlice({
         state.money = 0;
         state.relics = [];
         state.initialized = true;
-        state.drawsLeft = 8;
-        state.currentLevelIndex = 0;
+        if(state.relics.some((r) => r.effect === "bonusDraws")){
+          state.drawsLeft = 11;
+        }else{
+          state.drawsLeft = 8;
+        }
+        state.currentLevelIndex = 1;
         state.gameState = "relicSelection"; // Start with relic selection
       }
     },
@@ -65,6 +73,9 @@ const runSlice = createSlice({
     addMoney: (state, action) => {
       state.money += action.payload;
     },
+    add2Base: (state) => {
+      state.current2Base += 2;
+    },
     spendMoney: (state, action) => {
       state.money = Math.max(0, state.money - action.payload);
       console.log(`Spent $${action.payload}. Remaining money: $${state.money}`);
@@ -83,7 +94,7 @@ const runSlice = createSlice({
       state.availableDeck = [];
       state.seed = null;
       state.score = 0;
-      state.money = 0;
+      state.money = 10;
       state.relics = [];
       state.initialized = false;
       state.drawsLeft = 8;
@@ -94,13 +105,21 @@ const runSlice = createSlice({
       state.gameState = action.payload;
     },
     proceedToNextLevel: (state, action) => {
+      state.currentLevelIndex += 1;
+      if(state.currentLevelIndex%5===0 && state.currentLevelIndex!==0){
+        const seed = Date.now().toString();
+        const rng = seedrandom(seed);
+       state.currentBoss = pickBossEffect(state.pastBosses, rng);
+       state.pastBosses = [...state.pastBosses, state.currentBoss]
+      }else{
+        state.currentBoss = {}
+      }
       state.score = 0;
       if(state.relics.some((r) => r.effect === "startingMoney")){
         state.money += 6 + action.payload; // Base reward money + draws left
       }else{
         state.money += 3 + action.payload; // Base reward money + draws left
       }
-      state.currentLevelIndex += 1;
       state.gameState = "playing"; // Ensure shop pops up after each level
       state.drawsLeft = action.payload || 8;
       state.availableDeck = [...state.deck].sort(() => Math.random() - 0.5);
@@ -114,6 +133,7 @@ export const {
   modifyDeck,
   drawFromAvailableDeck,
   addScore,
+  add2Base,
   resetScore,
   addMoney,
   spendMoney,

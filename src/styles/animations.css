@@ -1,0 +1,101 @@
+/* Animations */
+@keyframes unoir-shine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes wildcard-glow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 20px rgba(250, 204, 21, 0.8);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(250, 204, 21, 1);
+    transform: scale(1.05);
+  }
+}
+@keyframes wildcard-pulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 20px rgba(250, 204, 21, 0.8);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(250, 204, 21, 1);
+    transform: scale(1.05);
+  }
+}
+@keyframes wildcard-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes veteran-glow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 20px rgba(251, 191, 36, 0.6);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 25px rgba(251, 191, 36, 0.8);
+  }
+}
+@keyframes mega-pulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(167, 139, 250, 0.8), 0 0 40px rgba(167, 139, 250, 0.4);
+    filter: brightness(1.1);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 40px rgba(167, 139, 250, 1), 0 0 60px rgba(167, 139, 250, 0.6);
+    filter: brightness(1.2);
+  }
+}
+@keyframes mega-badge-float {
+  0%, 100% { transform: translateX(-50%) translateY(0px); }
+  50% { transform: translateX(-50%) translateY(-3px); }
+}
+@keyframes money-sparkle {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+@keyframes subtle-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+@keyframes glow-pulse {
+  0% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 15px rgba(250, 204, 21, 0.6); }
+  50% { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 25px rgba(250, 204, 21, 0.9); }
+  100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 15px rgba(250, 204, 21, 0.6); }
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+@keyframes pop-in {
+  0% { transform: scale(0.9) translateY(-20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes score-popup-animation {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -70%) scale(1.2); opacity: 0.8; }
+  100% { transform: translate(-50%, -90%) scale(0.8); opacity: 0; }
+}
+@keyframes epic-glow {
+  0%, 100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 15px rgba(168, 85, 247, 0.4); }
+  50% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.6); }
+}
+@keyframes epic-badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes legendary-glow {
+  0%, 100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 20px rgba(250, 204, 21, 0.5); }
+  50% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(250, 204, 21, 0.8); }
+}
+@keyframes legendary-badge-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(250, 204, 21, 0.6); }
+  50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(250, 204, 21, 0.9); }
+}

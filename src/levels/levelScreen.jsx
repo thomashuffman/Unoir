@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { canPlayCard } from "../game/gameLogic";
 import Card from "../components/Card";
 import DeckModal from "../components/deckModal";
+import { useSelector, useDispatch } from "react-redux";
 
 const enhancementDescriptions = {
   plusFive: "Adds 5 points to your score.",
@@ -11,7 +12,9 @@ const enhancementDescriptions = {
   purple: "Current Score multiplier between 0.8x and 2.0x.",
 };
 
-const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], level = 1, money = 0 }) => {
+const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], level = 1, money = 0, LEVELS }) => {
+  const { currentBoss } = useSelector((state) => state.run);
+  
   const [showRelics, setShowRelics] = useState(false);
   const [deckModalOpen, setDeckModalOpen] = useState(false);
 
@@ -41,16 +44,22 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
   // Check if player has Cheap Shuffle relic (changes reset cost)
   const hasCheapReset = relics.some(r => r.effect === "cheapReset");
   const hasFreeResets = relics.some(r => r.effect === "freeResets");
-  const resetCost = hasFreeResets ? 0 : (hasCheapReset ? 2 : 4);
+  let resetCost = hasFreeResets ? 0 : (hasCheapReset ? 2 : 4);
+  if(currentBoss.name === 'chainExpensive'){
+    resetCost = money
+  }
+
 
   // Calculate progress percentage
   const progressPercentage = Math.min((score / goalScore) * 100, 100);
 
   return (
-    <div className="level-screen">
+    <div className={`level-screen ${currentBoss.name}`}>
       {/* Header: Game Title + Deck Button */}
+      <div className="main-header">
       <div className="level-header">
         <h1 className="game-title" aria-label="UNOIR">UNOIR</h1>
+        <div className="boss-description">{currentBoss.description}</div>
         <div className="level-header-actions">
           <button className="view-deck-inline" onClick={() => setDeckModalOpen(true)}>
             View Deck
@@ -64,7 +73,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
       <div className="stats-container">
         <div className="stat-item level-stat">
           <span className="stat-label">Level</span>
-          <span className="stat-value">{level}</span>
+          <span className="stat-value">{level} / {LEVELS.length}</span>
         </div>
         <div className="stat-item score-stat">
           <span className="stat-label">Score</span>
@@ -79,10 +88,15 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
           <span className="stat-label">Draws Left</span>
           <span className="stat-value">{drawsLeft}</span>
         </div>
+        <div className="stat-item draws-stat">
+          <span className="stat-label">Cards Left</span>
+          <span className="stat-value">{availableDeck.length}</span>
+        </div>
+      </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="progress-bar-container">
+      <div hidden={deckModalOpen} className="progress-bar-container">
         <div className="progress-bar-fill" style={{ width: `${progressPercentage}%` }}></div>
         <span className="progress-text">{Math.round(progressPercentage)}%</span>
       </div>
@@ -134,7 +148,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
         </div>
       )}
 
-     <div className="chain">
+     <div style={{visibility: deckModalOpen ? 'hidden' : 'visible' }} className="chain">
         {chain.length === 0 ? (
             <p>No cards played yet.</p>
         ) : (
@@ -168,7 +182,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
           ⚠️ No playable cards! Reset chain to continue {resetCost > 0 ? `(-$${resetCost})` : ''}
         </div>
       )}
-      <div className="hand">
+      <div style={{visibility: deckModalOpen ? 'hidden' : 'visible' }} className="hand">
         {hand.length === 0 ? (
           <p>No cards in hand.</p>
         ) : (
@@ -209,7 +223,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
           })
         )}
       </div>
-      <div className="controls">
+      <div style={{visibility: deckModalOpen ? 'hidden' : 'visible' }} className="controls">
         <button
           className="btn draw"
           onClick={onDraw}
@@ -284,6 +298,14 @@ LevelScreen.propTypes = {
   ),
   level: PropTypes.number,
   money: PropTypes.number,
+  LEVELS: PropTypes.arrayOf(
+    PropTypes.shape({
+      number: PropTypes.number.isRequired,
+      goal: PropTypes.number.isRequired,
+      number: PropTypes.number.isRequired,
+      levelType: PropTypes.string.isRequired,
+    })
+  )
 };
 
 export default LevelScreen;

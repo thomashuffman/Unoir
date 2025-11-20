@@ -9,7 +9,7 @@ const enhancementDescriptions = {
 
 // Group cards by color and sort by value within each group
 const groupDeckByColor = (deck) => {
-  const colorOrder = ['red', 'blue', 'green', 'yellow'];
+  const colorOrder = ['red', 'blue', 'green', 'yellow', 'purple'];
   
   // Separate wild cards
   const wildCards = deck.filter(card => card.enhancement === 'wild');
@@ -47,6 +47,9 @@ const DeckModal = ({ isOpen, onClose, deck, relics = [] }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Remaining Deck</h2>
+        <button className="btn close" onClick={onClose}>
+          Close
+        </button>
         {deck.length === 0 ? (
           <p>No cards left in the deck.</p>
         ) : (
@@ -82,9 +85,6 @@ const DeckModal = ({ isOpen, onClose, deck, relics = [] }) => {
             ))}
           </div>
         )}
-        <button className="btn close" onClick={onClose}>
-          Close
-        </button>
       </div>
     </div>
   );
