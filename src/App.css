@@ -2002,11 +2002,11 @@
 
   .card {
     width: 15vw;
-    height: 28vw;
+    height: 22vw;
     min-width: 15vw;
-    min-height: 28vw;
+    min-height: 22vw;
     max-width: 15vw;
-    max-height: 28vw;
+    max-height: 22vw;
   }
 
   .btn {
@@ -2042,6 +2042,7 @@
   }
   .main-header{
     position: fixed;
+    top: 5%;
   }
 
   .stats-container {
@@ -2093,9 +2094,9 @@
   .progress-bar-container {
     width: 90%;
     height: 14px;
-    margin-top: 60px;
+    margin-top: 20px;
     position: fixed;
-    top:20rem;
+    top:18rem;
   }
 
   /* Center remaining sections */
