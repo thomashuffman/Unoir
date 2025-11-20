@@ -1,6 +1,7 @@
 {
   "name": "unoir",
   "version": "0.1.0",
+  "homepage": "https://thomashuffman.github.io/Unoir",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
