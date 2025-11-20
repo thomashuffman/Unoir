@@ -455,7 +455,6 @@
   min-height: 100%; /* shares remaining space via 1fr row */
   overflow: hidden;
   align-content: flex-start;
-  grid-row: 5;
 }
 
 /* Smaller cards within LevelScreen to fit everything */
@@ -2102,7 +2101,7 @@
   /* Center remaining sections */
   .chain, .hand, .controls {
     width:max-content;
-    justify-content:center;
+    justify-content:left;
     overflow-x: auto;
     gap: 8px;
   }
@@ -2110,18 +2109,21 @@
   .chain {
     position: absolute;
     top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: red;
-    display:flexbox;
+    left: 0;
+    transform: translateY(-50%);
+    background-color: rgb(191, 255, 191);
+    display:flex;
     flex-direction: row; /* Ensures cards are positioned side by side */
     gap: clamp(6px, 2vw, 8px); /* Adds spacing between the cards */
-    overflow-x:scroll; /* Enables horizontal scrolling */
+    overflow-x:auto; /* Enables horizontal scrolling */
+    justify-content: flex-start;
+    padding-left: max(10px, env(safe-area-inset-left));  /* prevent edge cutoff */
   }
+  
 
 .hand {
   position: absolute;
-  top: 110%;
+  top: 100%;
   left: 0;                      /* ← change from 50% */
   right: 0;                     /* add this */
   transform: translateY(-50%);  /* ← only Y now */
@@ -2135,10 +2137,11 @@
 }
 
   .controls {
-    flex-direction: column;
     align-items: center;
     gap: 8px;
     margin-top: 10px;
+    transform: scale(0.75);
+    left: 25%;
   }
 
   .draw-button, .reset-button {
