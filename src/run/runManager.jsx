@@ -27,7 +27,7 @@ import Tooltip from "../components/Tooltip";
 
 // ========== DEV MODE ==========
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
-const DEV_MODE = true; // Set to true to enable dev mode
+const DEV_MODE = false; // Set to true to enable dev mode
 const DEV_RELICS = [
   "Mystic Hourglass"
   // "Rainbow Bridge",
@@ -446,7 +446,7 @@ export default function RunManager({ onExitRun }) {
   useEffect(() => {
     if (!initialized) {
       dispatch(initializeDeck());
-      let maxMoney = 1 + drawsLeft/2; // Base reward money + draws left
+      let maxMoney = 1 + drawsLeft; // Base reward money + draws left
       if(relics.some((r) => r.effect === "startingMoney")){
         maxMoney += 3;
       }
