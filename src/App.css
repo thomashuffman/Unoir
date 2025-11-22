@@ -17,7 +17,7 @@
   --font-xl: clamp(1.4rem, 5vw, 2rem);
   --font-xxl: clamp(1.8rem, 6vw, 2.5rem);
   
-  --card-width: clamp(50px, 18vw, 80px);
+  --card-width: clamp(50px, 12vw, 80px);
   --card-height: clamp(70px, 25vw, 112px);
   --mini-card-width: clamp(28px, 10vw, 40px);
   --mini-card-height: clamp(40px, 14vw, 56px);
@@ -567,7 +567,6 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  font-size: var(--font-sm);
   font-weight: 700;
   border-radius: var(--border-radius-md);
   color: white;
