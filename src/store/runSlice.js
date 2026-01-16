@@ -39,7 +39,7 @@ const runSlice = createSlice({
         }else{
           state.drawsLeft = 8;
         }
-        state.currentLevelIndex = 1;
+        state.currentLevelIndex = 0;
         state.gameState = "relicSelection"; // Start with relic selection
       }
     },

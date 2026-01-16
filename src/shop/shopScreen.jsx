@@ -241,6 +241,9 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
 
         {selectedPack && (
           <div className="modal-overlay">
+          <button className="view-deck-button" onClick={() => setShowDeckModal(true)}>
+            View Deck
+          </button>
             <div className="pack-modal">
               <h3>Choose a Card from {selectedPack.name}</h3>
               <div className="pack-options">

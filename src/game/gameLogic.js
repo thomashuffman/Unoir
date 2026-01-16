@@ -20,7 +20,9 @@ export function pickBossEffect(pastBosses, rng = Math.random){
   const BOSSEFFECTS = [
     {name: 'chainExpensive', description: 'The cost of resetting the chain is equal to your total money'},
     {name: 'baseIs3', description: 'The base value of every played card is 3 regardless of the number on the card'},
-    {name: 'noLongChains', description: 'Each card in the chain is -1 from the total score'}
+    {name: 'noLongChains', description: 'Each card in the chain is -1 from the total score'},
+    {name: '', description: ''}
+
   ]
   // const possibleBosses = BOSSEFFECTS.filter(
   //   (relic) => !pastBosses.some((r) => r.effect === relic.effect)
@@ -72,20 +74,27 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
     base = 3;
   }
 
-  if(card.value === 2){
-    base+=base2Value;
-  }
 
+  const hasBaseValueSix = relics.some(r => r.effect === "baseSix");
   const hasBaseIncrease = relics.some(r => r.effect === "baseValueIncrease");
   const hasLuckyBonus = relics.some((r) => r.effect === "luckyBonus");
   const hasOneMaxer = relics.some((r) => r.effect === "oneMultiplier");
-  const hasChainStarter = relics.some((r) => r.effect === "firstCardDouble");
+  const hasChainStarter = relics.some((r) => r.effect === "firstCardTriple");
   const hasPerfectHarmony = relics.some((r) => r.effect === "colorBonus");
   const hasMomentumBuilder = relics.some((r) => r.effect === "chainScaling");
   const hasValueMultiplier = relics.some((r) => r.effect === "highValueBonus");
   const hasComboKing = relics.some((r) => r.effect === "comboBonus");
   const hasIncreasingSequence = relics.some((r) => r.effect === "increasingSequence");
-   
+  
+  //Needs to be first so that we can add increases etc. after
+  if(hasBaseValueSix && currentBoss.name !== "baseIs3"){
+    base = 6;
+  }
+
+  if(card.value === 2){
+    base+=base2Value;
+  }
+
    if (hasValueMultiplier && card.value >= 4) {
      base += 2;
    }
@@ -93,7 +102,7 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
   if (hasPerfectHarmony && chain.length > 0) {
       const prevCard = chain[chain.length - 1];
       if (card.color !== prevCard.color && card.color !== "purple" && prevCard.color !== "purple") {
-        base += 4;
+        base += 20;
     }
   }
 
@@ -102,7 +111,7 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
   }
 
   if(hasChainStarter && chain.length<=1){
-    base*=2;
+    base*=3;
   }
 
   // Apply chain bonuses

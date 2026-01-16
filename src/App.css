@@ -545,6 +545,8 @@
   scroll-snap-type: x proximity;
 }
 
+
+
 .hand::-webkit-scrollbar, .chain::-webkit-scrollbar { display: none; }
 
 .chain {
@@ -1211,10 +1213,6 @@
 
   .level-header {
     margin-bottom: var(--spacing-xs);
-  }
-
-  .hand, .chain {
-    justify-content: center;
   }
 
   .shop-card:hover:not(.disabled):not(.purchased) {

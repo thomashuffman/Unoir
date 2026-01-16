@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Unoir/static/css/main.e363dcce.css",
-    "main.js": "/Unoir/static/js/main.4d913f21.js",
+    "main.css": "/Unoir/static/css/main.84b68c09.css",
+    "main.js": "/Unoir/static/js/main.fc74b378.js",
     "static/js/453.90419f88.chunk.js": "/Unoir/static/js/453.90419f88.chunk.js",
     "index.html": "/Unoir/index.html",
-    "main.e363dcce.css.map": "/Unoir/static/css/main.e363dcce.css.map",
-    "main.4d913f21.js.map": "/Unoir/static/js/main.4d913f21.js.map",
+    "main.84b68c09.css.map": "/Unoir/static/css/main.84b68c09.css.map",
+    "main.fc74b378.js.map": "/Unoir/static/js/main.fc74b378.js.map",
     "453.90419f88.chunk.js.map": "/Unoir/static/js/453.90419f88.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e363dcce.css",
-    "static/js/main.4d913f21.js"
+    "static/css/main.84b68c09.css",
+    "static/js/main.fc74b378.js"
   ]
 }
