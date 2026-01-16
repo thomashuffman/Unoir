@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { canPlayCard } from "../game/gameLogic";
-import Card from "../components/Card";
 import DeckModal from "../components/deckModal";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 
 const enhancementDescriptions = {
   plusFive: "Adds 5 points to your score.",

@@ -1,6 +1,4 @@
-const COLORS = ["red", "blue", "green", "yellow", "purple"];
-const VALUES = [1, 2, 3, 4, 5, 6];
-const ENHANCEMENTS = ["plusFive", "wild", "plusMoney", "purple"];
+
 
 export function generateDeck(size = 15, rng = Math.random) {
   const suits = ["red", "green", "blue", "yellow"];

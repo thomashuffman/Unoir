@@ -26,7 +26,6 @@ import InfoModal from "../components/infoModal";
 import LevelScreen from "../levels/levelScreen";
 import ShopScreen from "../shop/shopScreen";
 import ScorePopup from "../components/ScorePopup";
-import Tooltip from "../components/Tooltip";
 
 // ========== DEV MODE ==========
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
@@ -62,7 +61,6 @@ export default function RunManager({ onExitRun }) {
 
   const dispatch = useDispatch();
   const { deck, availableDeck, initialized, score, money, drawsLeft, currentLevelIndex, gameState, relics, currentBoss, current2Base } = useSelector((state) => state.run);
-  const { seed } = useSelector((state) => state.run);
 
   // Use Math.random for gameplay randomness (Gambler's Die, Purple cards)
   // The seed is only used for deck generation
