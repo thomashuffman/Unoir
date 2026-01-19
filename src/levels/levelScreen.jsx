@@ -11,7 +11,7 @@ const enhancementDescriptions = {
   purple: "Current Score multiplier between 0.8x and 2.0x.",
 };
 
-const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], level = 1, money = 0, LEVELS }) => {
+const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], deck=[], level = 1, money = 0, LEVELS }) => {
   const { currentBoss } = useSelector((state) => state.run);
   
   const [showRelics, setShowRelics] = useState(false);
@@ -66,7 +66,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
         </div>
       </div>
       
-      <DeckModal isOpen={deckModalOpen} onClose={() => setDeckModalOpen(false)} deck={availableDeck} relics={relics} />
+      <DeckModal isOpen={deckModalOpen} onClose={() => setDeckModalOpen(false)} deck={availableDeck} fullDeck={deck} relics={relics} />
 
       {/* Stats Display */}
       <div className="stats-container">
@@ -288,6 +288,14 @@ LevelScreen.propTypes = {
     })
   ),
   availableDeck: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+      enhancement: PropTypes.string,
+    })
+  ),
+  deck: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       color: PropTypes.string.isRequired,

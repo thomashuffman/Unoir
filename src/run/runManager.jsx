@@ -31,7 +31,7 @@ import ScorePopup from "../components/ScorePopup";
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
 const DEV_MODE = false; // Set to true to enable dev mode
 const DEV_RELICS = [
-  "Initial Draw"
+  "Thrice More"
   // "Rainbow Bridge",
   // "Chromatic Fusion",
 ]; // Add relic names here to force them into the selection
@@ -709,6 +709,7 @@ export default function RunManager({ onExitRun }) {
               onResetChain={resetChain}
               relics={relics}
               availableDeck={availableDeck}
+              deck={deck}
               LEVELS={LEVELS}
             />
           )}

@@ -1,4 +1,5 @@
 import Tooltip from "../src/components/Tooltip";
+import thriceMoreIcon from "../src/images/ThriceMore.jpg";
 export const ALL_STARTER_RELICS = [
     // COMMON RELICS (Basic helpful effects)
     { 
@@ -135,6 +136,15 @@ export const ALL_STARTER_RELICS = [
       descriptionText: "Every time you play a 2 all 2s in your deck gain +2 base value",
       description: <>Every time you play a 2 all 2s in your deck gain +2 base value</>,
       icon: "2",
+      cost: 6,
+      rarity: "uncommon"
+    },
+    { 
+      name: "Thrice More", 
+      effect: "threeThree", 
+      descriptionText: "Playing 3 3s in a row gives +33",
+      description: <>Playing 3 3s in a row gives +33 points</>,
+      icon: "333",
       cost: 6,
       rarity: "uncommon"
     },

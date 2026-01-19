@@ -2,7 +2,7 @@
 
 export function generateDeck(size = 15, rng = Math.random) {
   const suits = ["red", "green", "blue", "yellow"];
-  const values = [1, 2, 3, 4, 5, 6];
+  const values = [1,2,3,4,5,6];
   const deck = [];
 
   for (let i = 0; i < size; i++) {
@@ -83,6 +83,7 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
   const hasValueMultiplier = relics.some((r) => r.effect === "highValueBonus");
   const hasComboKing = relics.some((r) => r.effect === "comboBonus");
   const hasIncreasingSequence = relics.some((r) => r.effect === "increasingSequence");
+  const hasThriceMore = relics.some((r) => r.effect === "threeThree");
   
   //Needs to be first so that we can add increases etc. after
   if(hasBaseValueSix && currentBoss.name !== "baseIs3"){
@@ -146,6 +147,23 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
   if (hasLuckyBonus && chanceToProc < 0.15) {
     score *= 2;
     bonusTriggered = true;
+  }
+
+  if(hasThriceMore){
+    let threeCount=1;
+    let chainIndex = chain.length-1;
+    while (chainIndex >=0){
+      if(chain[chainIndex].value !== 3){
+        break;
+      }
+      if(chain[chainIndex].value === 3){
+        threeCount+=1;
+      }
+      chainIndex-=1;
+    }
+    if(threeCount>=3){
+      score +=33;
+    }
   }
 
   let finalMultiplier = 1;
