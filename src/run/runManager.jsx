@@ -31,7 +31,7 @@ import ScorePopup from "../components/ScorePopup";
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
 const DEV_MODE = false; // Set to true to enable dev mode
 const DEV_RELICS = [
-  "Thrice More"
+  "One Too Many"
   // "Rainbow Bridge",
   // "Chromatic Fusion",
 ]; // Add relic names here to force them into the selection
@@ -72,6 +72,48 @@ export default function RunManager({ onExitRun }) {
   const [firstCardPlayedThisLevel, setFirstCardPlayedThisLevel] = useState(false);
   const [chainResetThisLevel, setChainResetThisLevel] = useState(false);
   const currentLevel = LEVELS[currentLevelIndex];
+
+  // Normal weighted random selection based on rarity
+  const rarityWeights = {
+    common: 50,      // 50% chance weight
+    uncommon: 30,    // 30% chance weight
+    rare: 15,        // 15% chance weight
+    epic: 4,         // 4% chance weight
+    legendary: 1     // 1% chance weight
+  };
+
+  const selectWeightedRelics = () => {
+    const selected = [];
+    const availablePool = [...ALL_STARTER_RELICS];
+    
+    for (let i = 0; i < 3 && availablePool.length > 0; i++) {
+      // Calculate total weight
+      const totalWeight = availablePool.reduce((sum, relic) => {
+        return sum + (rarityWeights[relic.rarity] || 10);
+      }, 0);
+      
+      // Random selection based on weight
+      let random = Math.random() * totalWeight;
+      let selectedRelic = null;
+      
+      for (const relic of availablePool) {
+        random -= rarityWeights[relic.rarity] || 10;
+        if (random <= 0) {
+          selectedRelic = relic;
+          break;
+        }
+      }
+      
+      if (selectedRelic) {
+        selected.push(selectedRelic);
+        // Remove from pool to avoid duplicates
+        const index = availablePool.findIndex(r => r.effect === selectedRelic.effect);
+        availablePool.splice(index, 1);
+      }
+    }
+    
+    return selected;
+  };
 
   // Select 3 random relics at the start of the run
   const [starterRelics, setStarterRelics] = useState([]);
@@ -337,7 +379,7 @@ export default function RunManager({ onExitRun }) {
     const isFirstCardInChain = chain.length === 0;
     
     // Use Math.random for card scoring randomness
-    const result = calculateCardScore(chain, card, score, Math.random, relics, currentBoss, current2Base);
+    const result = calculateCardScore(chain, card, score, Math.random, relics, currentBoss, current2Base, deck);
     let cardScore = result.score;
     const bonusTriggered = result.bonusTriggered;
     
@@ -600,6 +642,7 @@ export default function RunManager({ onExitRun }) {
     setHand([]);
     setChain([]);
     dispatch(resetScore());
+    setStarterRelics(selectWeightedRelics());
   };
 
   // Proceed to the next level with extra draws from relics
@@ -711,6 +754,7 @@ export default function RunManager({ onExitRun }) {
               availableDeck={availableDeck}
               deck={deck}
               LEVELS={LEVELS}
+              restartRun={restartRun}
             />
           )}
 

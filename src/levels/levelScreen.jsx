@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { canPlayCard } from "../game/gameLogic";
 import DeckModal from "../components/deckModal";
 import { useSelector} from "react-redux";
+import { resetRun } from "../store/runSlice";
 
 const enhancementDescriptions = {
   plusFive: "Adds 5 points to your score.",
@@ -11,7 +12,7 @@ const enhancementDescriptions = {
   purple: "Current Score multiplier between 0.8x and 2.0x.",
 };
 
-const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], deck=[], level = 1, money = 0, LEVELS }) => {
+const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], deck=[], level = 1, money = 0, LEVELS, restartRun }) => {
   const { currentBoss } = useSelector((state) => state.run);
   
   const [showRelics, setShowRelics] = useState(false);
@@ -236,6 +237,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
           disabled={chain.length === 0}
         >
           Reset Chain {resetCost > 0 ? `-$${resetCost}` : '(Free)'}
+          
         </button>
       </div>
     </div>

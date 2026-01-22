@@ -131,11 +131,11 @@ export const ALL_STARTER_RELICS = [
       rarity: "uncommon"
     },
     { 
-      name: "Two For You", 
-      effect: "twoPermanent", 
-      descriptionText: "Every time you play a 2 all 2s in your deck gain +2 base value",
-      description: <>Every time you play a 2 all 2s in your deck gain +2 base value</>,
-      icon: "2",
+      name: "One Too Many", 
+      effect: "maxOnes", 
+      descriptionText: "The base value of every 1 played equals the total number of 1's in your deck",
+      description: <>The base value of every 1 played equals the total number of 1's in your deck</>,
+      icon: "1111",
       cost: 6,
       rarity: "uncommon"
     },
@@ -156,6 +156,15 @@ export const ALL_STARTER_RELICS = [
       description: <>The first card of each <Tooltip text="A sequence of cards played in a row that match by color or value">chain</Tooltip> scores triple points</>,
       icon: "⛓️",
       cost: 6,
+      rarity: "rare"
+    },
+    { 
+      name: "Two For You", 
+      effect: "twoPermanent", 
+      descriptionText: "Every time you play a 2 all 2s in your deck gain +2 base value",
+      description: <>Every time you play a 2 all 2s in your deck gain +2 base value</>,
+      icon: "2",
+      cost: 8,
       rarity: "rare"
     },
     { 
