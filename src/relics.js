@@ -1,5 +1,5 @@
 import Tooltip from "../src/components/Tooltip";
-import thriceMoreIcon from "../src/images/ThriceMore.jpg";
+import thriceMoreIcon from "../src/images/relics/ThriceMore.png";
 export const ALL_STARTER_RELICS = [
     // COMMON RELICS (Basic helpful effects)
     { 
@@ -144,7 +144,7 @@ export const ALL_STARTER_RELICS = [
       effect: "threeThree", 
       descriptionText: "Playing 3 3s in a row gives +33",
       description: <>Playing 3 3s in a row gives +33 points</>,
-      icon: "333",
+      icon: thriceMoreIcon,
       cost: 6,
       rarity: "uncommon"
     },

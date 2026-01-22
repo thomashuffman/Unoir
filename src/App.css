@@ -991,6 +991,26 @@
   margin-bottom: var(--spacing-xs);
 }
 
+.relic-card-icon {
+  font-size: var(--font-xxl);
+  margin-bottom: var(--spacing-xs);
+}
+
+.shop-card-icon {
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
+  margin-bottom: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shop-card-icon img {
+  width: 25%;
+  height: 25%;
+  object-fit: contain;
+}
+
 .shop-card h4 {
   color: #f9fafb;
   font-size: var(--font-md);

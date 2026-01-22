@@ -31,7 +31,7 @@ import ScorePopup from "../components/ScorePopup";
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
 const DEV_MODE = false; // Set to true to enable dev mode
 const DEV_RELICS = [
-  "One Too Many"
+  "Thrice More"
   // "Rainbow Bridge",
   // "Chromatic Fusion",
 ]; // Add relic names here to force them into the selection
@@ -692,7 +692,13 @@ export default function RunManager({ onExitRun }) {
           <div className="relic-selection">
             {starterRelics.map((relic, index) => (
               <div key={index} className="relic-option">
-                <div className="relic-icon">{relic.icon}</div>
+                <div className="shop-card-icon">
+                    {relic.icon?.endsWith?.(".png") || relic.icon?.endsWith?.(".jpg") ? (
+                      <img src={relic.icon} alt={relic.name} className="relic-icon-image" />
+                    ) : (
+                      <span>{relic.icon}</span>
+                    )}
+                  </div>
                 <h3>{relic.name}</h3>
                 <p>{relic.description}</p>
                 <button 

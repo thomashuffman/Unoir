@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { canPlayCard } from "../game/gameLogic";
 import DeckModal from "../components/deckModal";
 import { useSelector} from "react-redux";
-import { resetRun } from "../store/runSlice";
 
 const enhancementDescriptions = {
   plusFive: "Adds 5 points to your score.",

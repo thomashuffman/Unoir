@@ -18,8 +18,7 @@ export function pickBossEffect(pastBosses, rng = Math.random){
   const BOSSEFFECTS = [
     {name: 'chainExpensive', description: 'The cost of resetting the chain is equal to your total money'},
     {name: 'baseIs3', description: 'The base value of every played card is 3 regardless of the number on the card'},
-    {name: 'noLongChains', description: 'Each card in the chain is -1 from the total score'},
-    {name: '', description: ''}
+    {name: 'noLongChains', description: 'Each card in the chain is -1 from the total score'}
 
   ]
   // const possibleBosses = BOSSEFFECTS.filter(
