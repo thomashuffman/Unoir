@@ -200,7 +200,13 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
                   className={`shop-card relic-card rarity-${relic.rarity} ${purchasedItems.includes(relic.effect) ? "purchased" : ""} ${money < relic.cost ? "disabled" : ""}`}
                 >
                   <span className={`rarity-badge rarity-${relic.rarity}`}>{relic.rarity.toUpperCase()}</span>
-                  <div className="shop-card-icon">{relic.icon}</div>
+                 <div className="shop-card-icon">
+                    {relic.icon?.endsWith?.(".png") || relic.icon?.endsWith?.(".jpg") ? (
+                      <img src={relic.icon} alt={relic.name} className="relic-icon-image" />
+                    ) : (
+                      <span>{relic.icon}</span>
+                    )}
+                  </div>
                   <h4>{relic.name}</h4>
                   <p className="shop-card-description">{relic.description}</p>
                   <button
