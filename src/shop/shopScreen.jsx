@@ -36,6 +36,16 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
     { id: "removeCard", name: "Remove Card", description: "Remove a card from your deck", cost: 5, type: "removeCard", icon: "🗑️" },
   ];
 
+  // Mystery relic that appears in every shop
+  const MYSTERY_RELIC = {
+    effect: "mystery",
+    name: "Mystery Relic",
+    description: "What does this do...?",
+    cost: 25,
+    rarity: "legendary",
+    icon: "❓"
+  };
+
   const availableRelics = allRelics.filter(
     (relic) => !relics.some((r) => r.effect === relic.effect)
   );
@@ -113,6 +123,9 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
     setPurchasedItems([...purchasedItems, relic.effect]);
     dispatch(spendMoney(relic.cost));
     dispatch(addRelic(relic));
+    
+    // Log for debugging
+    console.log('Purchased relic:', relic);
   };
 
   const buyUtility = (utility) => {
@@ -144,6 +157,9 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
   const veteranThreshold = hasQuickVeteran ? 3 : 5;
 
   const sortedDeck = sortDeckByColorAndValue(deck);
+
+  // Check if mystery relic has been purchased
+  const isMysteryPurchased = relics.some(r => r.effect === "mystery") || purchasedItems.includes("mystery");
 
   return (
     <div className="overlay">
@@ -184,6 +200,32 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
           </div>
         </div>
 
+        {/* Mystery Relic - Shows on every level */}
+        {!isMysteryPurchased && (
+          <div className="shop-section">
+            <h3 className="section-title">✨ Mystery Relic</h3>
+            <div className="shop-grid relic-grid">
+              <div 
+                className={`shop-card relic-card rarity-${MYSTERY_RELIC.rarity} ${purchasedItems.includes(MYSTERY_RELIC.effect) ? "purchased" : ""} ${money < MYSTERY_RELIC.cost ? "disabled" : ""}`}
+              >
+                <span className={`rarity-badge rarity-${MYSTERY_RELIC.rarity}`}>{MYSTERY_RELIC.rarity.toUpperCase()}</span>
+                <div className="shop-card-icon">
+                  <span>{MYSTERY_RELIC.icon}</span>
+                </div>
+                <h4>{MYSTERY_RELIC.name}</h4>
+                <p className="shop-card-description">{MYSTERY_RELIC.description}</p>
+                <button
+                  className="btn buy"
+                  onClick={() => buyRelic(MYSTERY_RELIC)}
+                  disabled={purchasedItems.includes(MYSTERY_RELIC.effect) || money < MYSTERY_RELIC.cost}
+                >
+                  {purchasedItems.includes(MYSTERY_RELIC.effect) ? "Owned" : `$${MYSTERY_RELIC.cost}`}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {levelNumber%2===0&& (
           <div>
             <h3 className="section-title">Relics only show up after beating odd numbered levels, plan wisely</h3>
@@ -194,6 +236,7 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
           <div className="shop-section">
             <h3 className="section-title">✨ Relics</h3>
             <div className="shop-grid relic-grid">
+              {/* Regular relics */}
               {displayedRelics.map((relic) => (
                 <div 
                   key={relic.effect} 

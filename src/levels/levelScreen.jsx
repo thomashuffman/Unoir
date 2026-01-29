@@ -72,7 +72,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
       <div className="stats-container">
         <div className="stat-item level-stat">
           <span className="stat-label">Level</span>
-          <span className="stat-value">{level} / {LEVELS.length}</span>
+          <span className="stat-value">{level} / {LEVELS.length-6}</span>
         </div>
         <div className="stat-item score-stat">
           <span className="stat-label">Score</span>

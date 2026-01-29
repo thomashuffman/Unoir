@@ -13,6 +13,7 @@ import {
   addRelic,
   modifyDeck,
   addDraws,
+  spendMoney
 } from "../store/runSlice";
 import {
   calculateCardScore,
@@ -44,17 +45,22 @@ export default function RunManager({ onExitRun }) {
     { number: 2, goal: 40, maxDraws: 8, levelType: 'normal' },
     { number: 3, goal: 70, maxDraws: 8, levelType: 'normal' },
     { number: 4, goal: 90, maxDraws: 8, levelType: 'normal' },
-    { number: 5, goal: 110, maxDraws: 8, levelType: 'boss1' },
+    { number: 5, goal: 110, maxDraws: 8, levelType: 'regboss1' },
     { number: 6, goal: 130, maxDraws: 8, levelType: 'normal' },
     { number: 7, goal: 150, maxDraws: 8, levelType: 'normal' },
     { number: 8, goal: 190, maxDraws: 8, levelType: 'normal' },
     { number: 9, goal: 210, maxDraws: 8, levelType: 'normal' },
-    { number: 10, goal: 250, maxDraws: 8, levelType: 'boss2' },
+    { number: 10, goal: 250, maxDraws: 8, levelType: 'regboss2' },
     { number: 11, goal: 300, maxDraws: 8, levelType: 'normal' },
     { number: 12, goal: 320, maxDraws: 8, levelType: 'normal' },
     { number: 13, goal: 350, maxDraws: 8, levelType: 'normal' },
     { number: 14, goal: 380, maxDraws: 8, levelType: 'normal' },
-    { number: 15, goal: 420, maxDraws: 8, levelType: 'bossfinal' },
+    { number: 15, goal: 420, maxDraws: 8, levelType: 'bossfirstfinal' },
+    { number: 16, goal: 450, maxDraws: 8, levelType: 'extra1' },
+    { number: 17, goal: 480, maxDraws: 8, levelType: 'extra2' },
+    { number: 18, goal: 510, maxDraws: 8, levelType: 'extra3' },
+    { number: 19, goal: 530, maxDraws: 8, levelType: 'extra4' },
+    { number: 20, goal: 550, maxDraws: 8, levelType: 'bossfinalfinal' },
   ];
 
   let INITIAL_HAND_SIZE = 5;
@@ -272,11 +278,14 @@ export default function RunManager({ onExitRun }) {
         }
       }
       
-      if (currentLevelIndex === LEVELS.length - 1) {
+      if (LEVELS[currentLevelIndex].levelType.startsWith('bossfirstfinal')) {
         dispatch(setGameState("win"));
-      } else if(LEVELS[currentLevelIndex].levelType.startsWith('boss')){
+      } else if(LEVELS[currentLevelIndex].levelType.startsWith('regboss')){
         //TODO: update this so that we have a special event or screen for beating the boss
         dispatch(setGameState("shop"));
+      } else if(LEVELS[currentLevelIndex].levelType.startsWith('bossfinalfinal')){
+        //TODO: update this so that we have a special event or screen for beating the boss
+        dispatch(setGameState("winReally"));
       }else {
         dispatch(setGameState("shop"));
       }
@@ -775,14 +784,98 @@ export default function RunManager({ onExitRun }) {
 
           {gameState === "win" && (
             <div className="overlay">
-              <h2 className="result">You Completed All Levels! 🎉</h2>
-              <button className="btn draw" onClick={restartRun}>
-                Restart Run
-              </button>
-              <button className="btn draw" onClick={onExitRun}>
-                Exit to Menu
-              </button>
+              <h2 className="result">You Beat the First Boss! 🎉</h2>
+              <p className="shop-money">💰 Current Money: ${money}</p>
+              
+              {relics.some((r) => r.effect === "mystery") ? (
+                // User has mystery relic - free continue
+                <>
+                  <p className="mystery-message" style={{ fontSize: '1.2rem', marginBottom: '1rem', color: '#4CAF50' }}>
+                    ✨ The Mystery Relic reveals its power! ✨
+                  </p>
+                  <button className="btn draw" onClick={handleProceedToNextLevel}>
+                    Continue to Next Level →
+                  </button>
+                </>
+              ) : (
+                // User doesn't have mystery relic - pay to continue
+                <>
+                  <p className="mystery-message" style={{ fontSize: '1.1rem', marginBottom: '1rem', color: '#FF6B6B' }}>
+                    ❌ You should have bought the Mystery Relic when you had the chance...
+                  </p>
+                  {money >= 50 ? (
+                    <button 
+                      className="btn buy" 
+                      onClick={() => {
+                        dispatch(spendMoney(50));
+                        handleProceedToNextLevel();
+                      }}
+                      style={{ backgroundColor: '#FF6B6B' }}
+                    >
+                      Pay $50 to Continue
+                    </button>
+                  ) : (
+                    <p style={{ color: '#FF6B6B', fontWeight: 'bold' }}>
+                      Not enough money to continue! (Need $50)
+                    </p>
+                  )}
+                </>
+              )}
+              
+              <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <button className="btn draw" onClick={restartRun}>
+                  Restart Run
+                </button>
+                <button className="btn draw" onClick={onExitRun}>
+                  Exit to Menu
+                </button>
+              </div>
             </div>
+          )}
+
+          {gameState === "winReally" && (
+           <div className="victory-overlay">
+           <h2 className="victory-title">THE FINAL BOSS IS CONQUERED</h2>
+         
+           <p className="victory-subtitle">
+             The last enemy has fallen.  
+             The run is complete.
+           </p>
+         
+           <div className="victory-stats">
+             <p className="stat gold">
+               <span>Money Secured</span>
+               <strong>${money}</strong>
+             </p>
+         
+             <p className="stat emerald">
+               <span>Deck Forged</span>
+               <strong>{deck.length} Cards</strong>
+             </p>
+         
+             <p className="stat arcane">
+               <span>Relics Bound</span>
+               <strong>{relics.length}</strong>
+             </p>
+           </div>
+         
+           <div className="victory-flavor">
+             <p>
+               Your chain is flawless.  
+               Your name will not be forgotten.
+             </p>
+           </div>
+         
+           <div className="victory-actions">
+             <button className="btn btn-victory" onClick={restartRun}>
+               Begin Another Run
+             </button>
+             <button className="btn btn-ghost" onClick={onExitRun}>
+               Fade to Menu
+             </button>
+           </div>
+         </div>
+         
           )}
 
           {gameState === "lose" && (
