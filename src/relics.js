@@ -131,6 +131,15 @@ export const ALL_STARTER_RELICS = [
       rarity: "uncommon"
     },
     { 
+      name: "Big Hands Only", 
+      effect: "moneyPerCardsInHand", 
+      descriptionText: "Gain $1 for each card in hand when you beat a level",
+      description: <>Gain $1 for each card in hand when you beat a level</>,
+      icon: "✋",
+      cost: 6,
+      rarity: "uncommon"
+    },
+    { 
       name: "One Too Many", 
       effect: "maxOnes", 
       descriptionText: "The base value of every 1 played equals the total number of 1's in your deck",

@@ -32,7 +32,7 @@ import ScorePopup from "../components/ScorePopup";
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
 const DEV_MODE = false; // Set to true to enable dev mode
 const DEV_RELICS = [
-  "Thrice More"
+  "Big Hands Only"
   // "Rainbow Bridge",
   // "Chromatic Fusion",
 ]; // Add relic names here to force them into the selection
@@ -244,7 +244,26 @@ export default function RunManager({ onExitRun }) {
       if (relics.some((relic) => relic.effect === "extraMoney")) {
         moneyBonus += 5; // Golden Amulet: +$5 per level
       }
+      if(relics.some((r) => r.effect === "moneyPerCardsInHand")){
+        moneyBonus += hand.length;
+      }
       dispatch(addMoney(moneyBonus));
+
+      const moneyPopup = {
+        id: Date.now() + 995,
+        isMoney: true,
+        money: moneyBonus, // ADD money
+        position: {
+          x: window.innerWidth / 2,
+          y: 100,
+        },
+      };
+      
+      setPopups((prev) => [...prev, moneyPopup]);
+      
+      setTimeout(() => {
+        setPopups((prev) => prev.filter((p) => p.id !== moneyPopup.id));
+      }, 1500);
       
       // Alchemist's Touch: Randomly upgrade one card after level completion
       const hasAlchemist = relics.some((r) => r.effect === "upgradeCard");
@@ -742,6 +761,8 @@ export default function RunManager({ onExitRun }) {
               score={popup.score} 
               position={popup.position} 
               col={popup.color}
+              isMoney={popup.isMoney}
+              money={popup.money} 
               bonusTriggered={popup.bonusTriggered}
               isVeteran={popup.isVeteran}
               isFusion={popup.isFusion}
