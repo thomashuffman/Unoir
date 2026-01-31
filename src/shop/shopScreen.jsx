@@ -307,7 +307,7 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
                       <span className="enhancement">
                         {card.enhancement === "plusFive" && " (+5)"}
                         {card.enhancement === "wild" && " (Wild)"}
-                        {card.enhancement === "plusMoney" && " (+$1)"}
+                        {card.enhancement === "plusMoney" && " (+$3)"}
                         {card.enhancement === "purple" && " (Score x0.8 to x2.0)"}
                       </span>
                     )}
@@ -343,7 +343,7 @@ export default function ShopScreen({ levelNumber, onProceed, allRelics }) {
                         <span className="enhancement">
                           {card.enhancement === "plusFive" && " (+5)"}
                           {card.enhancement === "wild" && " (Wild)"}
-                          {card.enhancement === "plusMoney" && " (+$1)"}
+                          {card.enhancement === "plusMoney" && " (+$3)"}
                           {card.enhancement === "purple" && " (Purple)"}
                         </span>
                       )}

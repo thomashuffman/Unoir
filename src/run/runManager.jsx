@@ -470,7 +470,7 @@ export default function RunManager({ onExitRun }) {
     }
 
     if (card.enhancement === "plusMoney") {
-      dispatch(addMoney(1));
+      dispatch(addMoney(3));
     }
     
     // Mega cards give +$2 when played

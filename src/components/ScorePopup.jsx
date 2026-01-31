@@ -37,7 +37,7 @@ export default function ScorePopup({ score, position, col, bonusTriggered = fals
     } else if (cardEnhancement === "wild") {
       upgradeType = " → Wild";
     } else if (cardEnhancement === "plusMoney") {
-      upgradeType = " → +$1";
+      upgradeType = " → +$3";
     }
     
     if (isMega) {
@@ -60,7 +60,7 @@ export default function ScorePopup({ score, position, col, bonusTriggered = fals
     } else if (cardEnhancement === "wild") {
       cardDescription = `Wild ${cardDescription}`;
     } else if (cardEnhancement === "plusMoney") {
-      cardDescription = `${cardDescription} (+$1)`;
+      cardDescription = `${cardDescription} (+$3)`;
     } else if (cardEnhancement === "purple") {
       cardDescription = `Purple ${cardDescription}`;
     }

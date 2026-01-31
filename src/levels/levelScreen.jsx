@@ -7,7 +7,7 @@ import { useSelector} from "react-redux";
 const enhancementDescriptions = {
   plusFive: "Adds 5 points to your score.",
   wild: "Can be played on any card and any color card can follow it.",
-  plusMoney: "Grants $1 when played.",
+  plusMoney: "Grants $3 when played.",
   purple: "Current Score multiplier between 0.8x and 2.0x.",
 };
 
@@ -164,7 +164,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
                 <span className="enhancement">
                     {card.enhancement === "plusFive" && " (+5)"}
                     {card.enhancement === "wild" && " (Wild)"}
-                    {card.enhancement === "plusMoney" && " (+$1)"}
+                    {card.enhancement === "plusMoney" && " (+$3)"}
                     {card.enhancement === "purple" && " (Score x0.8 to x2.0)"}
                 </span>
                 )}
@@ -208,7 +208,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
                   <span className="enhancement">
                     {card.enhancement === "plusFive" && " (+5)"}
                     {card.enhancement === "wild" && " (Wild)"}
-                    {card.enhancement === "plusMoney" && " (+$1)"}
+                    {card.enhancement === "plusMoney" && " (+$3)"}
                     {card.enhancement === "purple" && " (Score x0.8 to x2.0)"}
                     {!["plusFive", "wild", "plusMoney", "purple"].includes(card.enhancement) &&
                       ` (${card.enhancement})`}

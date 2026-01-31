@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const enhancementDescriptions = {
   plusFive: "Adds 5 points to your score.",
   wild: "Can be played on any card and any color card can follow it.",
-  plusMoney: "Grants $1 when played.",
+  plusMoney: "Grants $3 when played.",
   purple: "Current Score multipler between 1x and 2.2x.",
 };
 
@@ -244,7 +244,7 @@ const DeckModal = ({ isOpen, onClose, deck, fullDeck, relics = [] }) => {
                         <span className="enhancement" style={{ fontSize: '11px' }}>
                           {card.enhancement === "plusFive" && " (+5)"}
                           {card.enhancement === "wild" && " (Wild)"}
-                          {card.enhancement === "plusMoney" && " (+$1)"}
+                          {card.enhancement === "plusMoney" && " (+$3)"}
                           {card.enhancement === "purple" && " (Purple)"}
                         </span>
                       )}
