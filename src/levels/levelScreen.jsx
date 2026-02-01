@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { canPlayCard } from "../game/gameLogic";
 import DeckModal from "../components/deckModal";
 import { useSelector} from "react-redux";
+import "./levelScreen.css";
 
 const enhancementDescriptions = {
   plusFive: "Adds 5 points to your score.",
@@ -11,7 +12,7 @@ const enhancementDescriptions = {
   purple: "Current Score multiplier between 0.8x and 2.0x.",
 };
 
-const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], deck=[], level = 1, money = 0, LEVELS, restartRun }) => {
+const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, levelType, onDraw, onPlayCard, onResetChain, relics = [], availableDeck = [], deck=[], level = 1, money = 0, LEVELS, restartRun }) => {
   const { currentBoss } = useSelector((state) => state.run);
   
   const [showRelics, setShowRelics] = useState(false);
@@ -53,7 +54,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, onDraw, onPlayC
   const progressPercentage = Math.min((score / goalScore) * 100, 100);
 
   return (
-    <div className={`level-screen ${currentBoss.name}`}>
+    <div className={`level-screen ${currentBoss.name} ${levelType}`}>
       {/* Header: Game Title + Deck Button */}
       <div className="main-header">
       <div className="level-header">

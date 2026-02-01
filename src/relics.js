@@ -149,6 +149,15 @@ export const ALL_STARTER_RELICS = [
       rarity: "uncommon"
     },
     { 
+      name: "The Rich Get Richer", 
+      effect: "addMoneyToScore", 
+      descriptionText: "The base value of every card is increased by your current money",
+      description: <>The base value of every card is increased by your current money</>,
+      icon: "🤑🤑",
+      cost: 7,
+      rarity: "uncommon"
+    },
+    { 
       name: "Thrice More", 
       effect: "threeThree", 
       descriptionText: "Playing 3 3s in a row gives +33",

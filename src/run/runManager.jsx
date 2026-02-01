@@ -32,7 +32,7 @@ import ScorePopup from "../components/ScorePopup";
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
 const DEV_MODE = false; // Set to true to enable dev mode
 const DEV_RELICS = [
-  "Big Hands Only"
+  "Rich Get Richer",
   // "Rainbow Bridge",
   // "Chromatic Fusion",
 ]; // Add relic names here to force them into the selection
@@ -407,7 +407,7 @@ export default function RunManager({ onExitRun }) {
     const isFirstCardInChain = chain.length === 0;
     
     // Use Math.random for card scoring randomness
-    const result = calculateCardScore(chain, card, score, Math.random, relics, currentBoss, current2Base, deck);
+    const result = calculateCardScore(money, chain, card, score, Math.random, relics, currentBoss, current2Base, deck);
     let cardScore = result.score;
     const bonusTriggered = result.bonusTriggered;
     
@@ -782,6 +782,7 @@ export default function RunManager({ onExitRun }) {
               score={score}
               level={currentLevel.number}
               goalScore={currentLevel.goal}
+              levelType={currentLevel.levelType}
               money={money}
               onDraw={drawCardHandler}
               onPlayCard={(card, position) => playCard(card, position)}

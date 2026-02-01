@@ -65,7 +65,7 @@ export function generatePackOptions(packType, deck, rng = Math.random) {
   return options;
 }
 
-export function calculateCardScore(chain, card, currentScore, rng = Math.random, relics, currentBoss, base2Value, fullDeck) {
+export function calculateCardScore(money, chain, card, currentScore, rng = Math.random, relics, currentBoss, base2Value, fullDeck) {
   
   let base = card.value;
   if(currentBoss.name === "baseIs3"){
@@ -85,6 +85,7 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
   const hasIncreasingSequence = relics.some((r) => r.effect === "increasingSequence");
   const hasThriceMore = relics.some((r) => r.effect === "threeThree");
   const hasMaxOnes = relics.some((r) => r.effect === "maxOnes");
+  const hasAddMoneyToScore = relics.some((r) => r.effect === "addMoneyToScore");
   //Needs to be first so that we can add increases etc. after
   if(hasBaseValueSix && currentBoss.name !== "baseIs3"){
     base = 6;
@@ -112,6 +113,10 @@ export function calculateCardScore(chain, card, currentScore, rng = Math.random,
 
   if(hasBaseIncrease){
     base+=2;
+  }
+
+  if(hasAddMoneyToScore){
+    base+=money;
   }
 
   if(hasChainStarter && chain.length<=1){
