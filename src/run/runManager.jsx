@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import victoryEmblem from "../images/IMG_1958.png";
 import {
   initializeDeck,
   drawFromAvailableDeck,
@@ -859,6 +860,15 @@ export default function RunManager({ onExitRun }) {
            <div className="victory-overlay">
            <h2 className="victory-title">THE FINAL BOSS IS CONQUERED</h2>
          
+           {/* Victory Image */}
+           <div className="victory-image-wrapper">
+           <img
+              src={victoryEmblem}
+              alt="Victory Emblem"
+              className="victory-image"
+            />
+           </div>
+         
            <p className="victory-subtitle">
              The last enemy has fallen.  
              The run is complete.
@@ -897,6 +907,7 @@ export default function RunManager({ onExitRun }) {
              </button>
            </div>
          </div>
+         
          
           )}
 

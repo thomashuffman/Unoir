@@ -839,6 +839,22 @@
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.victory-image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.victory-image {
+  max-width: 260px;
+  border-radius: 12px;
+  box-shadow:
+    0 0 30px rgba(250, 204, 21, 0.4),
+    0 0 60px rgba(250, 204, 21, 0.2);
+  opacity: 0.95;
+}
+
+
 .btn-victory:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
