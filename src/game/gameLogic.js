@@ -14,25 +14,25 @@ export function generateDeck(size = 15, rng = Math.random) {
   return deck.sort(() => rng() - 0.5);
 }
 
-export function pickBossEffect(pastBosses, rng = Math.random){
+export function pickBossEffect(pastBosses = [], rng = Math.random) {
   const BOSSEFFECTS = [
-    {name: 'chainExpensive', description: 'The cost of resetting the chain is equal to your total money'},
-    {name: 'baseIs3', description: 'The base value of every played card is 3 regardless of the number on the card'},
-    {name: 'noLongChains', description: 'Each card in the chain is -1 from the total score'},
-    {name: 'noSixes', description: 'Played Sixes will score 0 points'}
-
-  ]
-  // const possibleBosses = BOSSEFFECTS.filter(
-  //   (relic) => !pastBosses.some((r) => r.effect === relic.effect)
-  // );
+    { name: "chainExpensive", description: "The cost of resetting the chain is equal to your total money" },
+    { name: "baseIs3", description: "The base value of every played card is 3 regardless of the number on the card" },
+    { name: "noLongChains", description: "Each card in the chain is -1 from the total score" },
+    { name: "noSixes", description: "Played Sixes will score 0 points" },
+    { name: "minusTotal", description: "Subtract the value of the played card from the final score" },
+  ];
 
   const possibleBosses = BOSSEFFECTS.filter(
-    (boss) => !pastBosses.some((r) => r.name === boss.name)
+    (boss) => !pastBosses.some((r) => r?.name === boss.name)
   );
-  //let possibleBosses = BOSSEFFECTS.some()
-  let chosenBoss=possibleBosses[Math.floor(rng()*possibleBosses.length)];
 
-  return chosenBoss;
+  if (possibleBosses.length === 0) {
+    console.warn("No boss effects available — recycling pool");
+    return BOSSEFFECTS[Math.floor(rng() * BOSSEFFECTS.length)];
+  }
+
+  return possibleBosses[Math.floor(rng() * possibleBosses.length)];
 }
 
 export function generatePackOptions(packType, deck, rng = Math.random) {
@@ -68,7 +68,7 @@ export function generatePackOptions(packType, deck, rng = Math.random) {
 export function calculateCardScore(money, chain, card, currentScore, rng = Math.random, relics, currentBoss, base2Value, fullDeck) {
   
   let base = card.value;
-  if(currentBoss.name === "baseIs3"){
+  if(currentBoss?.name === "baseIs3"){
     base = 3;
   }
 
@@ -87,7 +87,7 @@ export function calculateCardScore(money, chain, card, currentScore, rng = Math.
   const hasMaxOnes = relics.some((r) => r.effect === "maxOnes");
   const hasAddMoneyToScore = relics.some((r) => r.effect === "addMoneyToScore");
   //Needs to be first so that we can add increases etc. after
-  if(hasBaseValueSix && currentBoss.name !== "baseIs3"){
+  if(hasBaseValueSix && currentBoss?.name !== "baseIs3"){
     base = 6;
   }
 
@@ -207,7 +207,10 @@ export function calculateCardScore(money, chain, card, currentScore, rng = Math.
     score+=money;
   }
 
-  if(currentBoss.name === "noSixes" && card.value===6){
+  if(currentBoss?.name === "minusTotal"){
+    score-=card.value;
+  }
+  if(currentBoss?.name === "noSixes" && card.value===6){
     score = 0;
   }
 

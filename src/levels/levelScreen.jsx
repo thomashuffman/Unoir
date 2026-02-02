@@ -45,7 +45,7 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, levelType, onDr
   const hasCheapReset = relics.some(r => r.effect === "cheapReset");
   const hasFreeResets = relics.some(r => r.effect === "freeResets");
   let resetCost = hasFreeResets ? 0 : (hasCheapReset ? 2 : 4);
-  if(currentBoss.name === 'chainExpensive'){
+  if(currentBoss?.name === 'chainExpensive'){
     resetCost = money
   }
 
@@ -54,12 +54,12 @@ const LevelScreen = ({ hand, chain, drawsLeft, score, goalScore, levelType, onDr
   const progressPercentage = Math.min((score / goalScore) * 100, 100);
 
   return (
-    <div className={`level-screen ${currentBoss.name} ${levelType}`}>
+    <div className={`level-screen ${currentBoss?.name} ${levelType}`}>
       {/* Header: Game Title + Deck Button */}
       <div className="main-header">
       <div className="level-header">
         <h1 className="game-title" aria-label="UNOIR">UNOIR</h1>
-        <div className="boss-description">{currentBoss.description}</div>
+        <div className="boss-description">{currentBoss?.description}</div>
         <div className="level-header-actions">
           <button className="view-deck-inline" onClick={() => setDeckModalOpen(true)}>
             View Deck

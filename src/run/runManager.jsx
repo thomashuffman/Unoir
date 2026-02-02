@@ -479,7 +479,7 @@ export default function RunManager({ onExitRun }) {
       }
       finalScore = Math.floor(finalScore + additive);
     }
-    if(currentBoss.name==="noLongChains"){
+    if(currentBoss?.name==="noLongChains"){
         finalScore-=chain.length;
     }
     
@@ -679,7 +679,7 @@ export default function RunManager({ onExitRun }) {
     setHand([]);
     setChain([]);
     
-    // Card Duplicator: Duplicate a random card when entering shop
+    // Card Duplicator: Duplicate a random card when leaving the shop
     const hasCardDuplicator = relics.some((r) => r.effect === "duplicateRandom");
     if (hasCardDuplicator && deck.length > 0) {
       const randomCard = deck[Math.floor(Math.random() * deck.length)];
