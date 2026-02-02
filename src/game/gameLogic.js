@@ -115,10 +115,6 @@ export function calculateCardScore(money, chain, card, currentScore, rng = Math.
     base+=2;
   }
 
-  if(hasAddMoneyToScore){
-    base+=money;
-  }
-
   if(hasChainStarter && chain.length<=1){
     base*=3;
   }
@@ -206,6 +202,10 @@ export function calculateCardScore(money, chain, card, currentScore, rng = Math.
     }
   }
   score = Math.round(score * (finalMultiplier));
+
+  if(hasAddMoneyToScore){
+    score+=money;
+  }
 
   if(currentBoss.name === "noSixes" && card.value===6){
     score = 0;

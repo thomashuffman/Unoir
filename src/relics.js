@@ -151,8 +151,8 @@ export const ALL_STARTER_RELICS = [
     { 
       name: "The Rich Get Richer", 
       effect: "addMoneyToScore", 
-      descriptionText: "The base value of every card is increased by your current money",
-      description: <>The base value of every card is increased by your current money</>,
+      descriptionText: "The final score of every card is increased by the value of your current money",
+      description: <>The final score of every card is increased by the value of your current money</>,
       icon: "🤑🤑",
       cost: 7,
       rarity: "uncommon"
