@@ -105,7 +105,7 @@ const runSlice = createSlice({
       state.gameState = action.payload;
     },
     proceedToNextLevel: (state, action) => {
-      state.currentLevelIndex += 1;
+      state.currentLevelIndex =20;
       if(state.currentLevelIndex%5===0 && state.currentLevelIndex!==0){
         const seed = Date.now().toString();
         const rng = seedrandom(seed);
