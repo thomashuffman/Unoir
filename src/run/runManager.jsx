@@ -29,6 +29,8 @@ import LevelScreen from "../levels/levelScreen";
 import ShopScreen from "../shop/shopScreen";
 import ScorePopup from "../components/ScorePopup";
 
+const victoryImages = require.context("../images", false, /\.(png|jpe?g|gif)$/);
+const allVictoryImages = victoryImages.keys().map(victoryImages);
 // ========== DEV MODE ==========
 // Set DEV_MODE to true and add relic names to DEV_RELICS to test specific relics
 const DEV_MODE = false; // Set to true to enable dev mode
@@ -63,6 +65,10 @@ export default function RunManager({ onExitRun }) {
     { number: 19, goal: 530, maxDraws: 8, levelType: 'extra4' },
     { number: 20, goal: 550, maxDraws: 8, levelType: 'bossfinalfinal' },
   ];
+
+  const [randomVictoryImage] = useState(
+    allVictoryImages[Math.floor(Math.random() * allVictoryImages.length)]
+  );
 
   let INITIAL_HAND_SIZE = 5;
 
@@ -861,13 +867,14 @@ export default function RunManager({ onExitRun }) {
            <h2 className="victory-title">THE FINAL BOSS IS CONQUERED</h2>
          
            {/* Victory Image */}
+           {/* Victory Image */}
            <div className="victory-image-wrapper">
-           <img
-              src={victoryEmblem}
+            <img
+              src={randomVictoryImage}
               alt="Victory Emblem"
               className="victory-image"
             />
-           </div>
+          </div>
          
            <p className="victory-subtitle">
              The last enemy has fallen.  
