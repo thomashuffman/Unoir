@@ -204,7 +204,7 @@ export function calculateCardScore(money, chain, card, currentScore, rng = Math.
   score = Math.round(score * (finalMultiplier));
 
   if(hasAddMoneyToScore){
-    score+=money/10;
+    score+=Math.ceil(money/10);
   }
 
   if(currentBoss?.name === "minusTotal"){
